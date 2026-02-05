@@ -4,7 +4,7 @@ metadata:
   name: prometheus-config
   namespace: monitoring
 data:
-  prometheus.yml: 
+  prometheus.yml: |
     global:
       scrape_interval: 15s
       evaluation_interval: 15s
@@ -16,17 +16,17 @@ data:
     #           # - alertmanager:9093
           
     # rule_files:
-    #   - "alert_rules.yml"  <-- Commented out until we create this file later
+    #   - "alert_rules.yml"
 
-  scrape_configs:
-      # Job 1: Internal monitoring
+    scrape_configs:
+      # Job 1: Internal monitoring (Prometheus monitoring itself)
       - job_name: "prometheus"
         static_configs:
           - targets: ["localhost:9090"]
 
-      # Job 2: Multi-Tenant Client Monitoring
+      # Job 2: Multi-Tenant Client Monitoring (Windows Targets via Tailscale)
       - job_name: "CLIENT_MONITORING"
-        # This magic trick ensures Grafana sees the "Alias" as the name, not the IP address
+        # Relabeling: Use the 'alias' label as the visible name in Grafana
         relabel_configs:
           - source_labels: [alias]
             target_label: instance
@@ -48,7 +48,7 @@ data:
               role: "Remote_Desktop"
               connection: "magicdns"
 
-          # --- TENANT: XTI-Laptop ---
+          # --- TENANT: XTI ---
           - targets: ["100.76.232.24:9182"] 
             labels:
               company: "XTI"
