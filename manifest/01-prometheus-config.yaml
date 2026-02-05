@@ -4,7 +4,7 @@ metadata:
   name: prometheus-config
   namespace: monitoring
 data:
-  prometheus.yml: |
+  prometheus.yml: 
     global:
       scrape_interval: 15s
       evaluation_interval: 15s
@@ -18,7 +18,7 @@ data:
     # rule_files:
     #   - "alert_rules.yml"  <-- Commented out until we create this file later
 
-    scrape_configs:
+  scrape_configs:
       # Job 1: Internal monitoring
       - job_name: "prometheus"
         static_configs:
