@@ -9,31 +9,18 @@ data:
       scrape_interval: 15s
       evaluation_interval: 15s
 
-    # alerting:
-    #   alertmanagers:
-    #     - static_configs:
-    #         - targets:
-    #           # - alertmanager:9093
-          
-    # rule_files:
-    #   - "alert_rules.yml"
-
     scrape_configs:
-      # Job 1: Internal monitoring (Prometheus monitoring itself)
       - job_name: "prometheus"
         static_configs:
           - targets: ["localhost:9090"]
 
-      # Job 2: Multi-Tenant Client Monitoring (Windows Targets via Tailscale)
       - job_name: "CLIENT_MONITORING"
-        # Relabeling: Use the 'alias' label as the visible name in Grafana
         relabel_configs:
           - source_labels: [alias]
             target_label: instance
             replacement: $1
         
         static_configs:
-          # --- TENANT: CRUZCON ---
           - targets: ["100.112.106.118:9182"] 
             labels:
               company: "Cruzcon"
@@ -48,7 +35,6 @@ data:
               role: "Remote_Desktop"
               connection: "magicdns"
 
-          # --- TENANT: XTI ---
           - targets: ["100.76.232.24:9182"] 
             labels:
               company: "XTI"
