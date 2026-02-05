@@ -61,3 +61,11 @@ scrape_configs:
           alias: "XTI-Laptop"
           role: "Application"
           connection: "magicdns"
+
+      # --- TENANT: NEW COMPANY ---
+      - targets: ["100.123.45.67:9182"] 
+            labels:
+              company: "NewCompany"
+              alias: "NewCo-Server"
+              role: "Database"
+              connection: "magicdns"
