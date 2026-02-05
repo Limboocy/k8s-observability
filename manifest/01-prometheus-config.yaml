@@ -41,3 +41,11 @@ data:
               alias: "XTI-Laptop"
               role: "Application"
               connection: "magicdns"
+
+              # --- NEW CLIENT: COMPANY NAME ---
+          - targets: ["100.123.45.67:9182"]    # <--- REPLACE WITH NEW TAILSCALE IP
+            labels:
+              company: "NewCompany"            # <--- Company Name
+              alias: "NewCo-Server-01"         # <--- Name shown in Grafana
+              role: "Database"                 # <--- Role (App, DB, RD, etc.)
+              connection: "magicdns"
