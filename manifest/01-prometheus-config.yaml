@@ -5,47 +5,59 @@ metadata:
   namespace: monitoring
 data:
   prometheus.yml: |
-    global:
-      scrape_interval: 15s
-      evaluation_interval: 15s
 
-    scrape_configs:
-      - job_name: "prometheus"
-        static_configs:
-          - targets: ["localhost:9090"]
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
 
-      - job_name: "CLIENT_MONITORING"
-        relabel_configs:
-          - source_labels: [alias]
-            target_label: instance
-            replacement: $1
-        
-        static_configs:
-          - targets: ["100.112.106.118:9182"] 
-            labels:
-              company: "Cruzcon"
-              alias: "Cruzcon-APP"
-              role: "Application"
-              connection: "magicdns"
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+          
+rule_files:
+  - "alert_rules.yml"
+scrape_configs:
+  # Job 1: Internal monitoring
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
 
-          - targets: ["100.102.111.12:9182"] 
-            labels:
-              company: "Cruzcon"
-              alias: "Cruzcon-RD"
-              role: "Remote_Desktop"
-              connection: "magicdns"
+  # Job 2: Multi-Tenant Client Monitoring
+  - job_name: "CLIENT_MONITORING"
+    # This magic trick ensures Grafana sees the "Alias" as the name, not the IP address
+    relabel_configs:
+      - source_labels: [alias]
+        target_label: instance
+        replacement: $1
+    
+    static_configs:
+      # --- TENANT: CRUZCON ---
+      - targets: ["100.112.106.118:9182"] 
+        labels:
+          company: "Cruzcon"
+          alias: "Cruzcon-APP"
+          role: "Application"
+          connection: "magicdns"
 
-          - targets: ["100.76.232.24:9182"] 
-            labels:
-              company: "XTI"
-              alias: "XTI-Laptop"
-              role: "Application"
-              connection: "magicdns"
+      - targets: ["100.102.111.12:9182"] 
+        labels:
+          company: "Cruzcon"
+          alias: "Cruzcon-RD"
+          role: "Remote_Desktop"
+          connection: "magicdns"
 
-              # --- NEW CLIENT: COMPANY NAME ---
-          - targets: ["100.123.45.67:9182"]    # <--- REPLACE WITH NEW TAILSCALE IP
-            labels:
-              company: "NewCompany"            # <--- Company Name
-              alias: "NewCo-Server-01"         # <--- Name shown in Grafana
-              role: "Database"                 # <--- Role (App, DB, RD, etc.)
-              connection: "magicdns"
+      # --- NEXT STEPS: ADD NEW COMPANIES HERE ---
+      # - targets: ["<NEW_IP>:9182"]
+      #   labels:
+      #     company: "Company_B"
+      #     alias: "CompB-Server"
+
+       # --- TENANT: XTI-Laptop ---
+      - targets: ["100.76.232.24:9182"] 
+        labels:
+          company: "XTI"
+          alias: "XTI-Laptop"
+          role: "Application"
+          connection: "magicdns"
