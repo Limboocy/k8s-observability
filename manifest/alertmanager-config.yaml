@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  namespace: monitoring
+data:
+  alertmanager.yml: |
+    global:
+      resolve_timeout: 5m
+
+    route:
+      group_by: ['alertname', 'severity']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 4h
+      receiver: 'msteams'  # Default receiver
+
+    receivers:
+    - name: 'msteams'
+      webhook_configs:
+      - url: 'https://default43d491ee0a80473ba8b0937cba92c1.ce.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/9f336064100e4b868196a0226b441731/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=i-Re-ouj_Q49ZrmsruKbcueJG3sMHnr3by8kRZVhuCs'
+        send_resolved: true
