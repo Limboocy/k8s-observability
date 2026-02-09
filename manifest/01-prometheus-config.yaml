@@ -9,17 +9,12 @@ data:
       scrape_interval: 15s
       evaluation_interval: 15s
 
-    # alerting:
-    #   alertmanagers:
-    #     - static_configs:
-    #         - targets:
-    #           # - alertmanager:9093
-          
-    # rule_files:
-    #   - "alert_rules.yml"
+    # --- UPDATED SECTION START ---
+    rule_files:
+      - "/etc/prometheus/rules/*.yml"  # Tells Prometheus: "Look in this folder for any rule files"
+    # --- UPDATED SECTION END ---
 
     scrape_configs:
-      # Job 1: Internal monitoring
       - job_name: "prometheus"
         static_configs:
           - targets: ["localhost:9090"]
