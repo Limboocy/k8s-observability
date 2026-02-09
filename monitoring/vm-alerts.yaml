@@ -1,0 +1,43 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: vm-health-alerts
+  namespace: monitoring  # Ensure this matches where your Prometheus runs
+  labels:
+    release: prometheus  # CRITICAL: This label matches your Prometheus "Rule Selector"
+spec:
+  groups:
+  - name: vm-health
+    rules:
+    # --- ALERT 1: HIGH CPU ---
+    - alert: HighCPUUsage
+      expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+      for: 5m
+      labels:
+        severity: critical
+        team: devops
+      annotations:
+        summary: "High CPU on {{ $labels.instance }}"
+        description: "CPU usage is at {{ $value | printf \"%.2f\" }}%."
+
+    # --- ALERT 2: HIGH MEMORY ---
+    - alert: HighMemoryUsage
+      expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 90
+      for: 5m
+      labels:
+        severity: warning
+        team: devops
+      annotations:
+        summary: "High Memory on {{ $labels.instance }}"
+        description: "Memory usage is at {{ $value | printf \"%.2f\" }}%."
+
+    # --- ALERT 3: LOW DISK SPACE ---
+    - alert: LowDiskSpace
+      expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/"} * 100) / node_filesystem_size_bytes{mountpoint="/"}) > 90
+      for: 10m
+      labels:
+        severity: critical
+        team: devops
+      annotations:
+        summary: "Disk Full on {{ $labels.instance }}"
+        description: "Disk usage is at {{ $value | printf \"%.2f\" }}%."
