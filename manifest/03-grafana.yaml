@@ -32,3 +32,5 @@ spec:                # <--- MAKE SURE THIS IS HERE
     - protocol: TCP
       port: 80
       targetPort: 3000
+
+      
