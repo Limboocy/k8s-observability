@@ -10,19 +10,16 @@ spec:
     targetRevision: staging
     path: manifest
     
-    # --- ADD THIS BLOCK ---
-    kustomize:
-      nameSuffix: -staging
-      commonLabels:
-        environment: staging
-    # ----------------------
-
+    # We keep kustomize here just in case, but the heavy lifting 
+    # is now done inside the manifest/kustomization.yaml file itself.
+  
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring-staging
+  
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+      - CreateNamespace=true  # <--- CRITICAL: This builds the room since we removed the file.
