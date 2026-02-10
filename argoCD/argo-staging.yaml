@@ -9,12 +9,13 @@ spec:
     repoURL: 'https://github.com/Limboocy/k8s-observability.git'
     targetRevision: staging
     path: manifest
-    
+
     # --- ADD THIS BLOCK ---
     kustomize:
       nameSuffix: -staging
       commonLabels:
         environment: staging
+
     # ----------------------
 
   destination:
