@@ -1,14 +1,19 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# --- STAGING SPECIFIC SETTINGS ---
+namespace: monitoring-staging
+nameSuffix: -staging
+commonLabels:
+  environment: staging
+# ---------------------------------
+
 resources:
-  # I added the missing files from your screenshot:
-  - 00-namespace.yaml
+  # - 00-namespace.yaml  <-- DELETED! Staging ignores this file.
   - 01-prometheus-config.yaml
   - 02-prometheus-deployment.yaml
   - 03-grafana.yaml
   - alertmanager-config.yaml
   - alertmanager-deployment.yaml
   - vm-alerts-configmap.yaml
-
   
