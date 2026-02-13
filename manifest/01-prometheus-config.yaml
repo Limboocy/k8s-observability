@@ -10,20 +10,19 @@ data:
       scrape_interval: 15s
       evaluation_interval: 15s
 
-    # 2. Alerting (MOVED LEFT - Now a sibling of global)
+    # 2. Alerting
     alerting:
       alertmanagers:
         - static_configs:
             - targets:
-              # NOTE: In Staging, this DNS name might need to be 'alertmanager-staging:9093'
-              # unless you have a Service named 'alertmanager' in that namespace.
-              - alertmanager:9093
+                # NOTE: In Staging, this DNS name might need to be 'alertmanager-staging:9093'
+                - alertmanager:9093
 
-    # 3. Rule Files (Sibling of global)
+    # 3. Rule Files
     rule_files:
       - "/etc/prometheus/rules/*.yml"
 
-    # 4. Scrape Configs (Sibling of global)
+    # 4. Scrape Configs
     scrape_configs:
       - job_name: "prometheus"
         static_configs:
@@ -38,14 +37,14 @@ data:
         
         static_configs:
           # --- TENANT: CRUZCON ---
-          - targets: ["100.112.106.118:9182"] 
+          - targets: ["100.112.106.118:9182"]
             labels:
               company: "Cruzcon"
               alias: "Cruzcon-APP"
               role: "Application"
               connection: "magicdns"
 
-          - targets: ["100.102.111.12:9182"] 
+          - targets: ["100.102.111.12:9182"]
             labels:
               company: "Cruzcon"
               alias: "Cruzcon-RD"
@@ -53,7 +52,7 @@ data:
               connection: "magicdns"
 
           # --- TENANT: XTI-Laptop ---
-          - targets: ["100.76.232.24:9182"] 
+          - targets: ["100.76.232.24:9182"]
             labels:
               company: "XTI"
               alias: "XTI-Laptop"
@@ -61,7 +60,7 @@ data:
               connection: "magicdns"
 
           # --- TENANT: NEW COMPANY ---
-          - targets: ["100.123.45.67:9182"] 
+          - targets: ["100.123.45.67:9182"]
             labels:
               company: "NewCompany"
               alias: "NewCo-Server"
