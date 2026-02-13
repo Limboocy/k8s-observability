@@ -18,21 +18,23 @@ spec:
         image: prom/prometheus:latest
         ports:
         - containerPort: 9090
+        resources:           # Added resources to help with "slowness"
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
         volumeMounts:
         - name: config-volume
           mountPath: /etc/prometheus/prometheus.yml
           subPath: prometheus.yml
-        
-        # --- NEW MOUNT ADDED HERE ---
         - name: alert-rules
           mountPath: /etc/prometheus/rules
-        # ----------------------------
-
       volumes:
       - name: config-volume
         configMap:
           name: prometheus-config
-
       - name: alert-rules
         configMap:
           name: prometheus-alert-rules
@@ -47,5 +49,5 @@ spec:
     app: prometheus
   ports:
     - protocol: TCP
-      port: 80
+      port: 9090           # <--- CHANGED FROM 80
       targetPort: 9090
