@@ -18,13 +18,28 @@ spec:
         image: grafana/grafana:latest
         ports:
         - containerPort: 3000
+        
+        # --- NEW: Plug in the Config ---
+        volumeMounts:
+        - name: grafana-datasources
+          mountPath: /etc/grafana/provisioning/datasources/datasources.yaml
+          subPath: datasources.yaml
+        # -------------------------------
+
+      # --- NEW: Define the Source ---
+      volumes:
+      - name: grafana-datasources
+        configMap:
+          name: grafana-datasources
+      # ------------------------------
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: grafana-service
   namespace: monitoring
-spec:                # <--- MAKE SURE THIS IS HERE
+spec:
   type: LoadBalancer
   selector:
     app: grafana
@@ -32,5 +47,3 @@ spec:                # <--- MAKE SURE THIS IS HERE
     - protocol: TCP
       port: 80
       targetPort: 3000
-
-      
