@@ -41,7 +41,7 @@ data:
           - targets: ["100.112.106.118:9182"] 
             labels:
               company: "Cruzcon"
-              alias: "Cruzcon-APP"
+              alias: "Cruzcon-APPPPP"
               role: "Application"
               connection: "magicdns"
 
