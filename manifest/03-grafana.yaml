@@ -19,20 +19,21 @@ spec:
         ports:
         - containerPort: 3000
         
-        # --- NEW: Plug in the Config ---
+        # --- ADD THESE LINES FOR THE TEST ---
+        env:
+        - name: GF_ORG_NAME
+          value: "Limboocy Personal Lab"
+        # ------------------------------------
+
         volumeMounts:
         - name: grafana-datasources
           mountPath: /etc/grafana/provisioning/datasources/datasources.yaml
           subPath: datasources.yaml
-        # -------------------------------
 
-      # --- NEW: Define the Source ---
       volumes:
       - name: grafana-datasources
         configMap:
           name: grafana-datasources
-      # ------------------------------
-
 ---
 apiVersion: v1
 kind: Service
