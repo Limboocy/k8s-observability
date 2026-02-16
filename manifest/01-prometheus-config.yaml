@@ -41,7 +41,7 @@ data:
           - targets: ["100.112.106.118:9182"] 
             labels:
               company: "Cruzcon"
-              alias: "Cruzcon-APPPPP"
+              alias: "Cruzcon-APP"
               role: "Application"
               connection: "magicdns"
 
@@ -56,7 +56,7 @@ data:
           - targets: ["100.76.232.24:9182"] 
             labels:
               company: "XTI"
-              alias: "XTI-Laptop"
+              alias: "XTI-Laptoppp"
               role: "Application"
               connection: "magicdns"
 
