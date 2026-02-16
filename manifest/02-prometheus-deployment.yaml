@@ -14,18 +14,33 @@ spec:
         app: prometheus
     spec:
       containers:
+        # --- 1. Main Prometheus Container ---
         - name: prometheus
           image: prom/prometheus:latest
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--web.enable-lifecycle" # <--- Crucial: Allows the reload signal
           ports:
             - containerPort: 9090
           volumeMounts:
             - name: config-volume
-              mountPath: /etc/prometheus/prometheus.yml
-              subPath: prometheus.yml
-            # --- NEW MOUNT ADDED HERE ---
+              mountPath: /etc/prometheus # <--- subPath removed!
             - name: alert-rules
               mountPath: /etc/prometheus/rules
-            # ----------------------------
+
+        # --- 2. Sidecar Config Reloader ---
+        - name: config-reloader
+          image: jimmidyson/configmap-reload:v0.5.0
+          args:
+            - "--volume-dir=/etc/prometheus"
+            - "--volume-dir=/etc/prometheus/rules"
+            - "--webhook-url=http://localhost:9090/-/reload"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/prometheus
+            - name: alert-rules
+              mountPath: /etc/prometheus/rules
+
       volumes:
         - name: config-volume
           configMap:
