@@ -55,7 +55,7 @@ data:
           - targets: ["100.76.232.24:9182"]
             labels:
               company: "XTI"
-              alias: "XTI-Laptop"
+              alias: "XTI-Cruzcon-Staging-Test"
               role: "Application"
               connection: "magicdns"
 
