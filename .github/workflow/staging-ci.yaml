@@ -1,0 +1,32 @@
+name: Staging CI - Validate Manifests
+
+# 1. Trigger the action when you push to the staging branch
+on:
+  push:
+    branches:
+      - staging
+  pull_request:
+    branches:
+      - staging
+
+jobs:
+  validate-yaml:
+    name: Validate Kubernetes YAML
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 2. Download your code into the GitHub runner
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 3. Install the Kubeconform validation tool
+      - name: Set up Kubeconform
+        uses: bmuschko/setup-kubeconform@v1
+        with:
+          kubeconform-version: '0.6.4'
+
+      # 4. Scan the 'manifest' folder for errors
+      - name: Run Kubeconform
+        run: |
+          echo "Scanning Kubernetes manifests..."
+          kubeconform -summary -verbose -strict manifest/
