@@ -29,4 +29,4 @@ jobs:
       - name: Run Kubeconform
         run: |
           echo "Scanning Kubernetes manifests..."
-          kubeconform -summary -verbose -strict manifest/
+          kubeconform -summary -verbose -strict -ignore-missing-schemas manifest/

@@ -1,7 +1,14 @@
-datasources:
-  - name: Prometheus
-    type: prometheus
-    access: proxy
-    # CHANGE THIS: Add the suffix manually!
-    url: http://prometheus-service-staging:80  
-    isDefault: true
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: monitoring-staging
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus-service-staging:80
+        isDefault: true
